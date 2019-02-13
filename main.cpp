@@ -20,7 +20,8 @@ void draw(sf::RenderWindow &w, int wi, int he, std::list<wave_source> &fields, d
                      double r = sqrt((s.getxpos() - i) * (s.getxpos() - i) + (s.getypos() - j) * (s.getypos() - j));
                      col += sin(s.getomega() * s.gettime() - r * s.getk())/(double)fields.size();
                      });
-            col *= 255;
+            col += 1;
+            col *= 127;
             c.setPosition(i,j);
             c.setFillColor(sf::Color(col, col, col));
             w.draw(c);
@@ -31,7 +32,7 @@ void draw(sf::RenderWindow &w, int wi, int he, std::list<wave_source> &fields, d
 int main()
 {
     int w_width = 600, w_heigth = 600;
-    double res = 5.f;
+    double res = 3.f;
     sf::Clock clock;
     clock.restart();
     std::list<wave_source> fields;
@@ -48,10 +49,10 @@ int main()
                 fields.clear();
             else if(event.type == sf::Event::MouseButtonPressed)
                 if(sf::Mouse::getPosition(window).x > 0 && sf::Mouse::getPosition(window).x < w_width && sf::Mouse::getPosition(window).y > 0 && sf::Mouse::getPosition(window).y < w_heigth)
-                fields.push_front(wave_source(floor((double)sf::Mouse::getPosition(window).x/res)*res, floor((double)sf::Mouse::getPosition(window).y/res)*res, 0.1f, 3.f));
+                fields.push_front(wave_source(floor((double)sf::Mouse::getPosition(window).x/res)*res, floor((double)sf::Mouse::getPosition(window).y/res)*res, 0.1f, 10.f));
         }
         window.clear();
-        sf::sleep(sf::seconds(0.05) - clock.getElapsedTime());
+        sf::sleep(sf::seconds(0.01) - clock.getElapsedTime());
         draw(window, w_width, w_heigth, fields, res, clock.restart().asSeconds());
         window.display();
     }

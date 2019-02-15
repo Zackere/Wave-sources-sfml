@@ -20,10 +20,12 @@ void draw(sf::RenderWindow &w, int wi, int he, std::list<wave_source> &fields, d
                      double r = sqrt((s.getxpos() - i) * (s.getxpos() - i) + (s.getypos() - j) * (s.getypos() - j));
                      col += sin(s.getomega() * s.gettime() - r * s.getk())/(double)fields.size();
                      });
-            col += 1;
-            col *= 127;
+            col *= 255.f;
+            if(col > 0)
+                c.setFillColor(sf::Color(255.f, col, 0));
+            else
+                c.setFillColor(sf::Color(255.f + col, 0, -col));
             c.setPosition(i,j);
-            c.setFillColor(sf::Color(col, col, col));
             w.draw(c);
         }
     }
@@ -52,7 +54,7 @@ int main()
                 fields.push_front(wave_source(floor((double)sf::Mouse::getPosition(window).x/res)*res, floor((double)sf::Mouse::getPosition(window).y/res)*res, 0.1f, 10.f));
         }
         window.clear();
-        sf::sleep(sf::seconds(0.01) - clock.getElapsedTime());
+        sf::sleep(sf::seconds(0.02) - clock.getElapsedTime());
         draw(window, w_width, w_heigth, fields, res, clock.restart().asSeconds());
         window.display();
     }
